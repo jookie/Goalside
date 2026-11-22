@@ -1,0 +1,43 @@
+generator client {
+  provider = "postgresql"
+}
+
+datasource db {
+  url = env("DATABASE_URL")
+}
+
+model EventType {
+  id          String   @default(uuid()) @id @unique
+  name        String   @unique
+  description String?
+  sortOrder   Int      @default(0)
+  parent_uuid String?   // NULL is OK for top-level
+  categories  EventCategory[]
+}
+
+model EventCategory {
+  id          String   @default(uuid()) @id @unique
+  name        String
+  description String?
+  sortOrder   Int      @default(0)
+  parent_uuid String
+  eventType   EventType @relation(fields: [parent_uuid], references: [id])
+  subCategories SubCategory[]
+  @@ unique([parent_uuid, name])
+}
+
+model EventSubCategory {
+  id          String   @default(uuid()) @id @unique
+  name        String
+  description String?
+  sortOrder   Int      @default(0)
+  parent_uuid String
+  category    EventCategory @relation(fields: [parent_uuid], references: [id])
+  scenarios   EventScenario[]
+}
+
+model EventScenario {
+  id          String   @default(u  id       @u  id          String   @def  de  id          String   @deder    id          au  id          String   @def  subC  id          SbCa  id          String   @default(u  id       @u  is:   id          String   @defauDi  id          Striayou  id          String   @default(ng   id          String   @default(u  id       @u  idri  id          String   ing?    //  id          Strin pa  id          String   @default(u  id       @u  lean  id          Str
+  parent_uuid    String
+                                  at                   _uuid], references: [id])
+}
