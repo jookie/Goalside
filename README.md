@@ -19,6 +19,12 @@ The schema is defined in `doc/` and uses PostgreSQL with the following key featu
 - **5-level deep hierarchy** via foreign keys
 
 All tables share a consistent field set:
+            -  (UUID FK → same table, NULL for top-level)
+            -  (TEXT NOT NULL)
+            -  (TEXT)
+            -  /  (TEXT — URL string, not BYTEA)
+            -  (INTEGER DEFAULT 0)
+            -  /  (TIMESTAMPTZ)
 - `id` (UUID PK)
 - `parent_id` (UUID FK → same table, NULL for top-level)
 - `name` (TEXT NOT NULL)

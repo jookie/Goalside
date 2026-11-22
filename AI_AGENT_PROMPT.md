@@ -51,11 +51,47 @@ git push -u origin main
 ```
 
 ### 6: Verify
+
+## Verify Git Setup
+
+Run the following to verify your git repository is properly configured:
+
 ```bash
+# Check current branch
+git branch
+
+# Verify remote is set
 git remote -v
-git status
+
+# Check latest commit
+git log --oneline -1
+
+# Verify script exists
+ls script/git-push.sh
 ```
-4. Initialize backend: `cd .. && npm init -y`
+
+## Run Verification
+
+```bash
+# Test push with message
+bash scripts/git-push.sh "Initial commit"
+
+# Test push without message
+bash scripts/git-push.sh
+```
+
+## Expected Output
+
+With message:
+- Adds files
+- Commits with provided message
+- Pushes to origin/main
+
+Without message:
+- Skips commit
+- Pushes existing changes to origin/main
+
+Initialize backend: `cd .. && npm init -y`
 5. Install backend dependencies: `npm install express prisma @prisma/client cors dotenv`
 6. Install dev dependencies: `npm install -D prisma typescript @types/node @types/express ts-node-dev`
 7. Initialize Prisma: `npx prisma init`
@@ -175,9 +211,9 @@ model EventType {
   name        String   @unique
   description String?
   sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  parent_uuid String?   // NULL is OK for top-level
   categories  EventCategory[]
+  // NULL is OK for top-level EventType
 }
 
 model EventCategory {
@@ -185,10 +221,10 @@ model EventCategory {
   name        String
   description String?
   sortOrder   Int      @default(0)
-  eventType   EventType @relation(fields: [eventTypeId], references: [id])
-  eventTypeId String
+  parent_uuid String
+  eventType   EventType @relation(fields: [parent_uuid], references: [id])
   subCategories SubCategory[]
-  @@ unique([eventTypeId, name])
+  @@ unique([parent_uuid, name])
 }
 
 model EventSubCategory {
@@ -196,8 +232,8 @@ model EventSubCategory {
   name        String
   description String?
   sortOrder   Int      @default(0)
-  category    EventCategory @relation(fields: [categoryId], references: [id])
-  categoryId  String
+  parent_uuid String
+  category    EventCategory @relation(fields: [parent_uuid], references: [id])
   scenarios   EventScenario[]
 }
 
@@ -206,8 +242,8 @@ model EventScenario {
   name        String
   description String?
   sortOrder   Int      @default(0)
-  subCategory EventSubCategory @relation(fields: [subCategoryId], references: [id])
-  subCategoryId String
+  parent_uuid String
+  subCategory EventSubCategory @relation(fields: [parent_uuid], references: [id])
   layoutDiagrams LayoutDiagram[]
 }
 
@@ -217,8 +253,8 @@ model LayoutDiagram {
   imageData      String?    // base64 data URL or path
   imageMimeType  String?
   isDefault      Boolean  @default(false)
-  eventScenario  EventScenario @relation(fields: [eventScenarioId], references: [id])
-  eventScenarioId String
+  parent_uuid    String
+  eventScenario  EventScenario @relation(fields: [parent_uuid], references: [id])
 }
 ```
 
