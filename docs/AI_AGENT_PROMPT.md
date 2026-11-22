@@ -32,6 +32,41 @@ The application manages a 5-level event taxonomy hierarchy (event_types → even
 1. Create project directory: `mkdir pitchside2 && cd pitchside2`
 2. Initialize frontend: `npm create vite@latest client -- --template react-ts`
 3. Install frontend dependencies: `cd client && npm install`
+
+__1.__ `mkdir pitchside2 && cd pitchside2` — <kbd>Copy</kbd>
+
+__2.__ `npm create vite@latest client -- --template react-ts` — <kbd>Copy</kbd>
+
+__3.__ `cd client && npm install` — <kbd>Copy</kbd>
+
+__4.__ `npm install @rolldown/binding-darwin-arm64` — <kbd>Copy</kbd>
+
+*(Step 4 is the Apple Silicon rolldown native binding fix we discovered)*
+
+__5.__ `cd client && npm run dev` — <kbd>Copy</kbd>
+
+
+mkdir pitchside2 && cd pitchside2
+npm create vite@latest client -- template react-ts
+cd client && npm install
+npm install @rolldown/binding-darwin-arm64
+cd client && npm run dev
+
+
+### Plan text you can cut and paste:
+
+```javascript
+### Quick Start Steps
+
+1. Create project directory: `mkdir pitchside2 && cd pitchside2`
+2. Initialize frontend: `npm create vite@latest client -- --template react-ts`
+3. Install frontend dependencies: `cd client && npm install`
+4. (Apple Silicon) If rolldown native binding is missing, install it explicitly: `npm install @rolldown/binding-darwin-arm64`
+5. Start the dev server to verify: `cd client && npm run dev`
+```
+
+
+
 ### 3. Install GitHub CLI (only if you don't have it)
 ```bash
 brew install gh
