@@ -1,0 +1,110 @@
+-- Enable UUID generation (built into PostgreSQL 13+)
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Helper trigger function to keep updated_at current on row updates
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 1. Top-level Event Types (e.g., "Sports events", "Conferences", "Military operations")
+CREATE TABLE event_types (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name           TEXT NOT NULL,
+  description    TEXT,
+  logo_data      BYTEA,
+  logo_mime_type TEXT,
+  sort_order     INTEGER NOT NULL DEFAULT 0,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  CONSTRAINT uq_event_types_name UNIQUE (name)
+);
+
+CREATE TRIGGER trg_event_types_updated_at
+BEFORE UPDATE ON event_types
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- 2. Categories under an Event Type (e.g., "Windsurfing", "Military patrol")
+CREATE TABLE event_categories (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_type_id  UUID NOT NULL REFERENCES event_types(id) ON DELETE CASCADE,
+  name           TEXT NOT NULL,
+  description    TEXT,
+  logo_data      BYTEA,
+  logo_mime_type TEXT,
+  sort_order     INTEGER NOT NULL DEFAULT 0,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  CONSTRAINT uq_event_categories_type_name UNIQUE (event_type_id, name)
+);
+
+CREATE INDEX idx_event_categories_type_id ON event_categories(event_type_id);
+
+CREATE TRIGGER trg_event_categories_updated_at
+BEFORE UPDATE ON event_categories
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- 3. Sub-Categories under a Category (e.g., "Windsurfing session", "Police & Military patrol")
+CREATE TABLE event_sub_categories (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  category_id    UUID NOT NULL REFERENCES event_categories(id) ON DELETE CASCADE,
+  name           TEXT NOT NULL,
+  description    TEXT,
+  logo_data      BYTEA,
+  logo_mime_type TEXT,
+  sort_order     INTEGER NOT NULL DEFAULT 0,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  CONSTRAINT uq_event_sub_categories_category_name UNIQUE (category_id, name)
+);
+
+CREATE INDEX idx_event_sub_categories_category_id ON event_sub_categories(category_id);
+
+CREATE TRIGGER trg_event_sub_categories_updated_at
+BEFORE UPDATE ON event_sub_categories
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- 4. Event Scenarios under a Sub-Category
+CREATE TABLE event_scenarios (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  sub_category_id UUID NOT NULL REFERENCES event_sub_categories(id) ON DELETE CASCADE,
+  name            TEXT NOT NULL,
+  description     TEXT,
+  logo_data       BYTEA,
+  logo_mime_type  TEXT,
+  sort_order      INTEGER NOT NULL DEFAULT 0,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  CONSTRAINT uq_event_scenarios_sub_category_name UNIQUE (sub_category_id, name)
+);
+
+CREATE INDEX idx_event_scenarios_sub_category_id ON event_scenarios(sub_category_id);
+
+CREATE TRIGGER trg_event_scenarios_updated_at
+BEFORE UPDATE ON event_scenarios
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- 5. Field / Court Layout Diagrams attached to an Event Scenario
+CREATE TABLE layout_diagrams (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_scenario_id UUID NOT NULL REFERENCES event_scenarios(id) ON DELETE CASCADE,
+  name              TEXT NOT NULL,
+  image_data        BYTEA NOT NULL,
+  image_mime_type   TEXT NOT NULL,
+  is_default        BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_layout_diagrams_event_scenario_id ON layout_diagrams(event_scenario_id);
+
+CREATE TRIGGER trg_layout_diagrams_updated_at
+BEFORE UPDATE ON layout_diagrams
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
