@@ -4,6 +4,9 @@ AI_AGENT_PROMPT.md
 
 ## React Stack Taxonomy for Live Streaming Events
 
+<details>
+<summary>Technology Stack & Taxonomy</summary>
+
 This project uses a modern web application technology stack tailored for managing live streaming events with a taxonomy hierarchy:
 
 - **Frontend Framework**: React 19 + Vite for fast development and hot module replacement
@@ -20,6 +23,9 @@ This project uses a modern web application technology stack tailored for managin
 
 The application manages a 5-level event taxonomy hierarchy (event_types → event_categories → event_sub_categories → event_scenarios → layout_diagrams) with CRUD operations, hierarchy-aware filtering, and image/logo upload capabilities.
 
+
+</details>
+
 ---
 
 # Scaffold Generation Prompt
@@ -27,6 +33,9 @@ The application manages a 5-level event taxonomy hierarchy (event_types → even
 ## AI Agent: Generate Project Scaffold
 
 **Task**: Initialize a new CRUD project for event taxonomy management
+
+<details>
+<summary>Workflow Steps</summary>
 
 ### Steps:
 1. Create project directory: `mkdir pitchside2 && cd pitchside2`
@@ -53,19 +62,29 @@ npm install @rolldown/binding-darwin-arm64
 cd client && npm run dev
 
 
+
+</details>
 ### Plan text you can cut and paste:
 
 ```javascript
+<details>
+<summary>Quick Start Steps</summary>
+
 ### Quick Start Steps
 
 1. Create project directory: `mkdir pitchside2 && cd pitchside2`
 2. Initialize frontend: `npm create vite@latest client -- --template react-ts`
 3. Install frontend dependencies: `cd client && npm install`
+
+</details>
 4. (Apple Silicon) If rolldown native binding is missing, install it explicitly: `npm install @rolldown/binding-darwin-arm64`
 5. Start the dev server to verify: `cd client && npm run dev`
 ```
 
 
+
+<details>
+<summary>GitHub CLI Setup</summary>
 
 ### 3. Install GitHub CLI (only if you don't have it)
 ```bash
@@ -79,6 +98,8 @@ gh auth login
 Follow the prompts — choose HTTPS, paste the code in your browser.
 
 ### 5: Create the GitHub repository and push your files
+
+</details>
 Replace `Goalside` with whatever name you want:
 ```bash
 gh repo create Goalside --public --source=. --remote=origin
@@ -86,6 +107,9 @@ git push -u origin main
 ```
 
 ### 6: Verify
+
+<details>
+<summary>Git Setup Verification</summary>
 
 ## Verify Git Setup
 
@@ -96,6 +120,8 @@ Run the following to verify your git repository is properly configured:
 git branch
 
 # Verify remote is set
+
+</details>
 git remote -v
 
 # Check latest commit
@@ -104,6 +130,9 @@ git log --oneline -1
 # Verify script exists
 ls script/git-push.sh
 ```
+
+<details>
+<summary>Run Verification</summary>
 
 ## Run Verification
 
@@ -115,7 +144,12 @@ bash scripts/git-push.sh "Initial commit"
 bash scripts/git-push.sh
 ```
 
+<details>
+<summary>Expected Output</summary>
+
 ## Expected Output
+
+</details>
 
 With message:
 - Adds files
@@ -152,6 +186,8 @@ Initialize backend: `cd .. && npm init -y`
    ```
 9. Directory structure:
    ```
+
+</details>
    pitchside2/
    ├── client/           # React + Vite frontend
    │   ├── src/components/
@@ -175,6 +211,9 @@ Initialize backend: `cd .. && npm init -y`
    ├── README.md
    └── ROAD_MAP.md
    ```
+
+<details>
+<summary>Prisma Schema Generation</summary>
 
 ### Prisma Schema Generation:
 Generate `server/prisma/schema.prisma` with 5 models:
@@ -227,6 +266,8 @@ services:
       - "4000:4000"
 volumes:
   postgres_data:
+
+</details>
 DOCKER_COMPOSE
 ```
 
