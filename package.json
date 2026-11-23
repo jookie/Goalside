@@ -1,5 +1,11 @@
 {
   "dependencies": {
     "@rolldown/binding-darwin-arm64": "^1.3.3"
+  },
+  "scripts": {
+    "test:b": "cd server && npm test",
+    "test:f": "cd client && npm test",
+    "test": "cd server && npm test && cd client && npm test",
+    "push": "scripts/gpush.sh"
   }
 }
