@@ -96,7 +96,51 @@ Special:
 - **No `sort_order` or `is_default`** for now — keep schema simple and stable.
 - **Replace, not alongside**: New `EventsDataTabV2.tsx` fully replaces old `EventsDataTab.tsx`.
 
-## Development
-- Backend: Node.js + Express + Prisma ORM
-- Frontend: React 19 + Vite + TypeScript + Tailwind CSS
-- Database: PostgreSQL 13+ (Docker available via `docker-compose.yml` when backend is created)
+## Test Suite
+
+<details>
+<summary>🧪 Test Suite (click to expand)</summary>
+
+### Backend API Tests (`server/`)
+
+Run: `cd server && npm test`
+
+| Test | Status |
+|------|--------|
+| `GET /api/health` | ✓ responds with status ok |
+| `GET /api/:table` | ✓ lists all records |
+| `GET /api/:table/:id` | ✓ gets a record |
+| `POST /api/:table` | ✓ creates a record |
+| `PUT /api/:table/:id` | ✓ updates a record |
+| `DELETE /api/:table/:id` | ✓ deletes a record |
+
+**Test file:** `server/tests-api.test.js` — 6/6 tests passing using Jest + Supertest
+
+---
+
+### Frontend Component Tests (`client/`)
+
+Run: `cd client && npm test`
+
+| Test | Status |
+|------|--------|
+| `App Component > renders without crashing` | ✓ 24ms |
+
+**Test file:** `client/src/__tests__/App.test.jsx` — 1/1 test passing using Vitest v3.2.7 + React Testing Library + jsdom
+
+**Note:** Vitest v3 requires compatible dependency versions:
+- `jsdom@^25.0.1` (v30+ has ESM-only issues on Node 20)
+- `@testing-library/jest-dom@^6.9.1` (v8+ is ESM-only)
+
+---
+
+### Test Commands Summary
+
+| Purpose | Command |
+|---------|---------|
+| **Run all backend tests** | `cd /Users/dovpeles/workspace/pitchside2/server && npm test` |
+| **Run all frontend tests** | `cd /Users/dovpeles/workspace/pitchside2/client && npm test` |
+| **Start backend server** | `cd /Users/dovpeles/workspace/pitchside2/server && node index.js` |
+| **Start frontend dev** | `cd /Users/dovpeles/workspace/pitchside2/client && npm run dev` |
+
+</details>
